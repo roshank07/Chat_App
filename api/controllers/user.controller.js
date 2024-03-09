@@ -8,6 +8,9 @@ const userController = {
     const { name, email, password, pic } = req.body;
 
     try {
+      if (!name || !email || !password) {
+        return next(errorHandler(400, "Please enter all the required fields"));
+      }
       const userExists = await User.findOne({ email });
       if (userExists) {
         return next(errorHandler(400, "User Already Exists"));
@@ -52,6 +55,24 @@ const userController = {
       } else {
         return next(errorHandler(400, "User doesn't exist."));
       }
+    } catch (error) {
+      next(error);
+    }
+  },
+  search_user: async (req, res, next) => {
+    const keyword = req.query.search
+      ? {
+          $or: [
+            { name: { $regex: req.query.search, $options: "i" } },
+            { email: { $regex: req.query.search, $options: "i" } },
+          ],
+        }
+      : {};
+    try {
+      const users = await User.find(keyword).find({
+        _id: { $ne: req.user.id },
+      });
+      res.send(users);
     } catch (error) {
       next(error);
     }

@@ -14,7 +14,7 @@ export default function HomePage() {
         borderRadius="lg"
         borderWidth="1px"
         display="flex"
-        margin="40px 0 15px 0"
+        margin="10px 0 10px 0"
         justifyContent="center"
       >
         <Text fontSize="4xl" fontFamily="work sans" color="black">

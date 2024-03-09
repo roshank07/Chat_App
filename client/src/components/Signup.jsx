@@ -112,7 +112,7 @@ export default function Signup() {
   };
 
   return (
-    <VStack spacing="5px">
+    <VStack spacing="2px">
       <FormControl id="name" isRequired>
         <FormLabel>Name</FormLabel>
         <Input
