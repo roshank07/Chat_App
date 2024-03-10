@@ -36,6 +36,7 @@ export default function Login() {
       if (response.ok) {
         setLoading(false);
         setErrorMessage(null);
+        localStorage.setItem("userInfo", JSON.stringify(data));
         navigate("/chats");
       } else {
         setErrorMessage(data.message);
