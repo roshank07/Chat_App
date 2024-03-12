@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import userRoute from "./routes/user.route.js";
 import chatRoute from "./routes/chat.route.js";
+import messageRoute from "./routes/message.route.js";
 
 dotenv.config();
 const app = express();
@@ -27,6 +28,7 @@ app.use(cookieParser());
 
 app.use("/api/user", userRoute);
 app.use("/api/chat", chatRoute);
+app.use("/api/message", messageRoute);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
