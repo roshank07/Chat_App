@@ -52,9 +52,9 @@ const server = app.listen(PORT, () => {
 });
 const io = new Server(server, {
   pingTimeout: 60000,
-  cors: {
-    origin: "http://localhost:5173",
-  },
+  // cors: {
+  //   origin: "http://localhost:5173",
+  // },
 });
 
 io.on("connection", (socket) => {
