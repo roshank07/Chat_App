@@ -16,6 +16,8 @@ import UpdateGroupChatModal from "./UpdateGroupChatModal.jsx";
 import "./style.css";
 import ScrollableChat from "./ScrollableChat.jsx";
 import io from "socket.io-client";
+import Lottie from "react-lottie";
+import typingAnimation from "../animations/typing.json";
 
 const ENDPOINT = "http://localhost:3000";
 var socket, selectedChatCompare;
@@ -119,10 +121,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
     if (!socketConnected) return;
 
-    if (!typing) {
-      setTyping(true);
-      socket.emit("typing", selectedChat._id);
-    }
+    setTyping(true);
+    socket.emit("typing", selectedChat._id);
 
     let lastTypingTime = new Date().getTime();
     var timerLength = 3000;
@@ -134,6 +134,15 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         setTyping(false);
       }
     }, timerLength);
+  };
+
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: typingAnimation,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
   };
 
   return (
@@ -194,7 +203,16 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 <ScrollableChat message={message} />
 
                 <FormControl onKeyDown={sendMessage} isRequired mt={3}>
-                  {istyping ? <div>typing...</div> : <></>}
+                  {istyping ? (
+                    // <Lottie
+                    //   options={defaultOptions}
+                    //   width={75}
+                    //   style={{ marginBottom: 15, marginLeft: 0 }}
+                    // />
+                    <span>typing...</span>
+                  ) : (
+                    <></>
+                  )}
                   <Input
                     variant="filled"
                     bg="#E0E0E0"
