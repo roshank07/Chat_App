@@ -16,7 +16,6 @@ import UpdateGroupChatModal from "./UpdateGroupChatModal.jsx";
 import "./style.css";
 import ScrollableChat from "./ScrollableChat.jsx";
 import io from "socket.io-client";
-import Lottie from "react-lottie";
 import typingAnimation from "../animations/typing.json";
 
 const ENDPOINT = "http://localhost:3000";
