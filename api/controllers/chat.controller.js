@@ -77,11 +77,11 @@ const chatController = {
       users.push(req.user.id);
       const groupChat = await Chat.create({
         chatName: req.body.name,
-        isGroupChat: true,
         users: users,
+        isGroupChat: true,
         groupAdmin: req.user.id,
       });
-      const fullGroupChat = await Chat.find({ _id: groupChat._id })
+      const fullGroupChat = await Chat.findOne({ _id: groupChat._id })
         .populate("users", "-password")
         .populate("groupAdmin", "-password");
       res.status(200).json(fullGroupChat);

@@ -95,6 +95,7 @@ export default function GroupChatModal({ children }) {
       });
       const data = await response.json();
       setChats([data, ...chats]);
+      console.log("GroupModal", chats);
       setLoading(false);
       onClose();
       toast({
@@ -114,6 +115,7 @@ export default function GroupChatModal({ children }) {
         isClosable: true,
         position: "bottom-left",
       });
+      setLoading(false);
     }
   };
 

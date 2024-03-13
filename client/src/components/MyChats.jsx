@@ -13,9 +13,9 @@ export default function MyChats({ fetchAgain }) {
 
   const fetchChats = async () => {
     try {
-      const response = await fetch("/api/chat/");
+      const response = await fetch("/api/chat");
       const data = await response.json();
-      //   console.log(data);
+      console.log(data);
       setChats(data);
     } catch (error) {
       toast({
@@ -80,6 +80,7 @@ export default function MyChats({ fetchAgain }) {
           <Stack overflowY="scroll">
             {chats.map((chat) => (
               <Box
+                key={chat._id}
                 onClick={() => setSelectedChat(chat)}
                 cursor="pointer"
                 bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
@@ -87,7 +88,6 @@ export default function MyChats({ fetchAgain }) {
                 px={3}
                 py={2}
                 borderRadius="lg"
-                key={chat._id}
               >
                 <Text>
                   {chat.isGroupChat === false

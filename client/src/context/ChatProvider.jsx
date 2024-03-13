@@ -16,6 +16,7 @@ const ChatProvider = ({ children }) => {
       setuser(userInfo);
     }
   }, [navigate]);
+  // console.log(user);
 
   return (
     <ChatContext.Provider

@@ -79,10 +79,10 @@ export default function SideDrawer() {
     try {
       setLoadingChat(true);
 
-      const response = await fetch("/api/chat/", {
+      const response = await fetch("/api/chat", {
         method: "POST",
         headers: {
-          "Content-type": "application/json",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ userId }),
       });
