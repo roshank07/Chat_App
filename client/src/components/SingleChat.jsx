@@ -23,7 +23,8 @@ const ENDPOINT = "http://localhost:3000";
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
-  const { user, selectedChat, setSelectedChat } = ChatState();
+  const { user, selectedChat, notification, setSelectedChat, setNotification } =
+    ChatState();
   const [message, setMessage] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState();
@@ -51,6 +52,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         const response = await fetch(`/api/message/${selectedChat._id}`);
         const data = await response.json();
         setMessage(data);
+        // setNotification(notification.filter((n) => n !== noti));
         setLoading(false);
         socket.emit("join chat", selectedChat._id);
       } catch (error) {
@@ -69,13 +71,18 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     selectedChatCompare = selectedChat;
   }, [selectedChat]);
 
+  console.log(notification, "noti");
+
   useEffect(() => {
     socket.on("message received", (newMessageReceived) => {
       if (
         !selectedChatCompare ||
         selectedChatCompare._id !== newMessageReceived.chat._id
       ) {
-        //notify
+        if (!notification.includes(newMessageReceived)) {
+          setNotification([newMessageReceived, ...notification]);
+          setFetchAgain(!fetchAgain);
+        }
       } else {
         setMessage([...message, newMessageReceived]);
       }

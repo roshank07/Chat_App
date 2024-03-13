@@ -29,13 +29,23 @@ import ProfileModal from "./ProfileModal";
 import { useNavigate } from "react-router-dom";
 import ChatLoading from "./ChatLoading";
 import UserListItem from "./UserListItem";
+import { getSender } from "../config/ChatLogic";
+import NotificationBadge, { Effect } from "react-notification-badge";
+import { BellIcon } from "@chakra-ui/icons";
 
 export default function SideDrawer() {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState();
-  const { user, setSelectedChat, chats, setChats } = ChatState();
+  const {
+    user,
+    setSelectedChat,
+    chats,
+    notification,
+    setChats,
+    setNotification,
+  } = ChatState();
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef();
@@ -136,9 +146,33 @@ export default function SideDrawer() {
         <div>
           <Menu>
             <MenuButton p={3}>
-              <FaBell />
+              <NotificationBadge
+                count={notification.length}
+                effect={Effect.SCALE}
+              />
+
+              <BellIcon fontSize="2xl" m={1} />
             </MenuButton>
-            {/* <MenuList></MenuList> */}
+            <MenuList p={2}>
+              {notification.length
+                ? notification.map((noti) => (
+                    <MenuItem
+                      key={noti._id}
+                      onClick={() => {
+                        setSelectedChat(noti.chat);
+                        setNotification(notification.filter((n) => n !== noti));
+                      }}
+                    >
+                      {noti.chat.isGroupChat
+                        ? `New Message in ${noti.chat.chatName}`
+                        : `New Message from ${getSender(
+                            user,
+                            noti.chat.users
+                          )}`}
+                    </MenuItem>
+                  ))
+                : "No new Messages"}
+            </MenuList>
           </Menu>
           <Menu>
             <MenuButton as={Button} rightIcon={<FaChevronDown />}>

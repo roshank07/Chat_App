@@ -15,7 +15,6 @@ export default function MyChats({ fetchAgain }) {
     try {
       const response = await fetch("/api/chat");
       const data = await response.json();
-      console.log(data);
       setChats(data);
     } catch (error) {
       toast({
