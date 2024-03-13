@@ -6,11 +6,13 @@ import userRoute from "./routes/user.route.js";
 import chatRoute from "./routes/chat.route.js";
 import messageRoute from "./routes/message.route.js";
 import { Server } from "socket.io";
+import path from "path";
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+mongoose.set("strictQuery", true);
 mongoose
   .connect(process.env.db_URL)
   .then(() => {
@@ -35,6 +37,15 @@ app.use((err, req, res, next) => {
     message: message,
   });
 });
+
+/*  ------Deployment------ */
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, "/client/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+});
+/*  ------------ */
 
 const server = app.listen(PORT, () => {
   console.log(`App is running on port ${PORT} `);
