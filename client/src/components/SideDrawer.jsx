@@ -30,8 +30,8 @@ import { useNavigate } from "react-router-dom";
 import ChatLoading from "./ChatLoading";
 import UserListItem from "./UserListItem";
 import { getSender } from "../config/ChatLogic";
-import NotificationBadge, { Effect } from "react-notification-badge";
 import { BellIcon } from "@chakra-ui/icons";
+import "./style.css";
 
 export default function SideDrawer() {
   const [search, setSearch] = useState("");
@@ -49,7 +49,7 @@ export default function SideDrawer() {
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef();
-  const toast = useToast();
+  const toast_error = useToast();
 
   const handleSignOut = () => {
     localStorage.removeItem("userInfo");
@@ -57,7 +57,7 @@ export default function SideDrawer() {
   };
   const handleSearch = async (e) => {
     if (!search) {
-      toast({
+      toast_error({
         title: "Warning",
         description: "Please enter something to search",
         status: "warning",
@@ -74,7 +74,7 @@ export default function SideDrawer() {
       setLoading(false);
       setSearchResult(data);
     } catch (error) {
-      toast({
+      toast_error({
         title: "Error",
         description: error.message,
         status: "error",
@@ -105,7 +105,7 @@ export default function SideDrawer() {
       setLoadingChat(false);
       onClose();
     } catch (error) {
-      toast({
+      toast_error({
         title: "Error",
         description: error.message,
         status: "error",
@@ -145,13 +145,17 @@ export default function SideDrawer() {
         </Text>
         <div>
           <Menu>
-            <MenuButton p={3}>
-              <NotificationBadge
-                count={notification.length}
-                effect={Effect.SCALE}
-              />
-
-              <BellIcon fontSize="2xl" m={1} />
+            <MenuButton paddingRight={2}>
+              <div style={{ display: "flex" }}>
+                <div
+                  className={`badge ${
+                    notification.length > 0 ? "show" : "hide"
+                  }`}
+                >
+                  {notification.length}
+                </div>
+                <BellIcon fontSize="2xl" />
+              </div>
             </MenuButton>
             <MenuList p={2}>
               {notification.length
