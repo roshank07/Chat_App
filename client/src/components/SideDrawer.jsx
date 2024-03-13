@@ -33,7 +33,7 @@ import { getSender } from "../config/ChatLogic";
 import { BellIcon } from "@chakra-ui/icons";
 import "./style.css";
 
-export default function SideDrawer() {
+export default function SideDrawer({ fetchAgain, setFetchAgain }) {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -101,8 +101,9 @@ export default function SideDrawer() {
       if (!chats.find((c) => c._id === data._id)) {
         setChats([data, ...chats]);
       }
-      setSelectedChat(data);
+      // setSelectedChat(data);
       setLoadingChat(false);
+      setFetchAgain(!fetchAgain);
       onClose();
     } catch (error) {
       toast_error({
