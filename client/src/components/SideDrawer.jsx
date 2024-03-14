@@ -65,6 +65,7 @@ export default function SideDrawer({ fetchAgain, setFetchAgain }) {
         isClosable: true,
         position: "bottom-left",
       });
+      return;
     }
 
     try {
