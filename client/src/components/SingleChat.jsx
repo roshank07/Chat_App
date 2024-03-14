@@ -18,7 +18,7 @@ import ScrollableChat from "./ScrollableChat.jsx";
 import io from "socket.io-client";
 import typingAnimation from "../animations/typing.json";
 
-const ENDPOINT = "http://localhost:3000";
+const ENDPOINT = "http://localhost:10000";
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
