@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import userRoute from "./routes/user.route.js";
 import chatRoute from "./routes/chat.route.js";
 import messageRoute from "./routes/message.route.js";
+import { createServer } from "http";
 import { Server } from "socket.io";
 import path from "path";
 
@@ -47,18 +48,17 @@ app.get("*", (req, res) => {
 });
 /*  ------------ */
 
-const server = app.listen(PORT, () => {
-  console.log(`App is running on port ${PORT} `);
-});
+const server = createServer(app);
 const io = new Server(server, {
   pingTimeout: 60000,
-  cors: {
-    origin: "*",
-  },
+  // cors: {
+  //   origin: "*",
+  // },
 });
 
 io.on("connection", (socket) => {
-  console.log("Connected to socket.io");
+  // console.log("Connected to socket.io");
+
   socket.on("setup", (userData) => {
     socket.join(userData._id);
     socket.emit("connected");
@@ -66,25 +66,28 @@ io.on("connection", (socket) => {
 
   socket.on("join chat", (room) => {
     socket.join(room);
-    console.log("User Joined Room: " + room);
+    // console.log("User Joined Room: " + room);
   });
 
-  socket.on("typing", (room) => socket.in(room).emit("typing"));
-  socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
+  socket.on("typing", (room) => socket.to(room).emit("typing"));
+  socket.on("stop typing", (room) => socket.to(room).emit("stop typing"));
 
   socket.on("new message", (newMessageReceived) => {
-    var chat = newMessageReceived.chat;
+    const chat = newMessageReceived.chat;
     if (!chat.users) return console.log("chat.users not found");
 
     chat.users.forEach((user) => {
       if (user._id === newMessageReceived.sender._id) return;
 
-      socket.in(user._id).emit("message received", newMessageReceived);
+      socket.to(user._id).emit("message received", newMessageReceived);
     });
   });
 
-  socket.off("setup", () => {
-    console.log("User Disconnected.");
-    socket.leave(userData._id);
+  socket.on("disconnect", () => {
+    // socket.rooms.size === 0
   });
+});
+
+server.listen(PORT, () => {
+  console.log(`App is running on port ${PORT}`);
 });

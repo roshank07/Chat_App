@@ -18,7 +18,7 @@ import ScrollableChat from "./ScrollableChat.jsx";
 import io from "socket.io-client";
 import typingAnimation from "../animations/typing.json";
 
-const ENDPOINT = "https://chat-app-d5qw.onrender.com";
+const ENDPOINT = import.meta.env.VITE_BACKEND_URL;
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
@@ -31,7 +31,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [typing, setTyping] = useState(false);
   const [istyping, setIsTyping] = useState(false);
   const toast = useToast();
-
   useEffect(() => {
     socket = io(ENDPOINT);
     socket.emit("setup", user);
