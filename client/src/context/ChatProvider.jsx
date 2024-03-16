@@ -10,12 +10,20 @@ const ChatProvider = ({ children }) => {
   const [notification, setNotification] = useState([]);
   const navigate = useNavigate();
   useEffect(() => {
-    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-    if (!userInfo) {
-      navigate("/");
-    } else {
-      setuser(userInfo);
-    }
+    const userVerification = async () => {
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      const response = await fetch("/api/user/cookie-verify");
+      if (response.ok) {
+        if (!userInfo) {
+          navigate("/");
+        } else {
+          setuser(userInfo);
+        }
+      } else {
+        navigate("/");
+      }
+    };
+    userVerification();
   }, [navigate]);
   // console.log(user);
 

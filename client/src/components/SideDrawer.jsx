@@ -51,9 +51,38 @@ export default function SideDrawer({ fetchAgain, setFetchAgain }) {
   const btnRef = useRef();
   const toast_error = useToast();
 
-  const handleSignOut = () => {
-    localStorage.removeItem("userInfo");
-    navigate("/");
+  const handleSignOut = async () => {
+    try {
+      const result = await fetch(`/api/user/signout`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await result.json();
+      if (result.ok) {
+        localStorage.removeItem("userInfo");
+        navigate("/");
+      } else {
+        toast_error({
+          title: "Error",
+          description: data.message,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+          position: "bottom-left",
+        });
+      }
+    } catch (error) {
+      toast_error({
+        title: "Error",
+        description: error.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "bottom-left",
+      });
+    }
   };
   const handleSearch = async (e) => {
     if (!search) {

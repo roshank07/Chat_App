@@ -77,6 +77,29 @@ const userController = {
       next(error);
     }
   },
+  cookie_verification: async (req, res, next) => {
+    const userId = req.user.id;
+
+    try {
+      const user = await User.findById(userId);
+      if (!user) {
+        next(errorHandler(400, "Unauthorized"));
+      }
+      res.status(200).json("Cookie verified successfully");
+    } catch (error) {
+      next(error);
+    }
+  },
+  userSignout: async (req, res, next) => {
+    try {
+      res
+        .clearCookie("access_token")
+        .status(200)
+        .json("User has been Signed Out.");
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 export default userController;
